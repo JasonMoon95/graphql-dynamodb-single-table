@@ -1,0 +1,54 @@
+#set($id = $util.autoUlid())
+
+#set($firstPutItem = {
+    "version": "2018-05-29",
+    "operation": "PutItem",
+    "key": {
+        "PK": $util.dynamodb.toDynamoDBJson("USER#$ctx.args.input.userId"),
+        "SK": $util.dynamodb.toDynamoDBJson("OWNEDIMAGE#${id}")
+    },
+    "attributeValues": {
+        "_TYPE": $util.dynamodb.toDynamoDBJson("OWNEDIMAGE"),
+        "id": $util.dynamodb.toDynamoDBJson($id),
+        "source_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.source_url),
+        "thumbnail_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.thumbnail_url),
+        "title": $util.dynamodb.toDynamoDBJson($ctx.args.input.title),
+        "status": $util.dynamodb.toDynamoDBJson($ctx.args.input.status),
+        "createdAt": $util.dynamodb.toDynamoDBJson($ctx.args.input.createdAt)
+    },
+    "condition": {
+        "expression": "attribute_not_exists(PK)"
+    }
+})
+
+#set($secondPutItem = {
+    "version": "2018-05-29",
+    "operation": "PutItem",
+    "key": {
+        "PK": $util.dynamodb.toDynamoDBJson("USER#$ctx.args.input.imageId"),
+        "SK": $util.dynamodb.toDynamoDBJson("OWNEDIMAGE#${id}")
+    },
+    "attributeValues": {
+        "_TYPE": $util.dynamodb.toDynamoDBJson("OWNEDIMAGE"),
+        "id": $util.dynamodb.toDynamoDBJson($id),
+        "source_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.source_url),
+        "thumbnail_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.thumbnail_url),
+        "title": $util.dynamodb.toDynamoDBJson($ctx.args.input.title),
+        "status": $util.dynamodb.toDynamoDBJson($ctx.args.input.status),
+        "createdAt": $util.dynamodb.toDynamoDBJson($ctx.args.input.createdAt)
+    },
+    "condition": {
+        "expression": "attribute_not_exists(PK)"
+    }
+})
+#set($Items = [])
+$util.qr($Items.add($firstPutItem))
+$util.qr($Items.add($secondPutItem))
+
+{
+    "version" : "2018-05-29",
+    "operation" : "BatchPutItem",
+    "tables" : {
+        "DynamoDBSingleTable": $util.toJson($Items)
+    }
+}

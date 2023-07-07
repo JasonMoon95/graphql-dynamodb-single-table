@@ -1,0 +1,36 @@
+#set($id = $util.autoUlid())
+
+#set($firstPutItem = 
+    {
+        "PK": "USER#$ctx.args.input.userId",
+        "SK": "OWNEDIMAGE#${id}",
+        "_TYPE": "OWNEDIMAGE",
+        "id": $id,
+        "source_url": $ctx.args.input.source_url,
+        "thumbnail_url": $ctx.args.input.thumbnail_url,
+        "title": $ctx.args.input.title,
+        "createdAt": $ctx.args.input.createdAt
+    }
+)
+
+#set($secondPutItem =
+    {
+        "PK": "IMAGE#$ctx.args.input.imageId",
+        "SK": "OWNEDIMAGE#${id}",
+        "_TYPE": "OWNEDIMAGE",
+        "id": $id,
+        "source_url": $ctx.args.input.source_url,
+        "thumbnail_url": $ctx.args.input.thumbnail_url,
+        "title": $ctx.args.input.title,
+        "createdAt": $ctx.args.input.createdAt
+    }
+)
+
+#set($Items = [$util.dynamodb.toMapValues($firstPutItem), $util.dynamodb.toMapValues($secondPutItem)])
+{
+    "version" : "2018-05-29",
+    "operation" : "BatchPutItem",
+    "tables" : {
+        "SingleTableCdkStack-DynamoDBTable59784FC0-46SZA9UIOBER": $util.toJson($Items)
+    }
+}

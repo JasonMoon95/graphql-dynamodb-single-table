@@ -1,0 +1,8 @@
+#if($ctx.results.items.size() == 0)
+    #return
+#end
+
+#set($randomIndex = $util.randomInt(0, $ctx.results.items.size() - 1))
+#set($selectedItem = $ctx.results.items[$randomIndex])
+
+$util.toJson($selectedItem)

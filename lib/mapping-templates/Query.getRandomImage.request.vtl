@@ -1,0 +1,12 @@
+{
+    "version": "2018-05-29",
+    "operation": "Query",
+    "query": {
+        "expression": "begins_with(PK, :pk) and begins_with(SK, :sk)",
+        "expressionValues": {
+            ":pk": $util.dynamodb.toDynamoDBJson("IMAGE#"),
+            ":sk": $util.dynamodb.toDynamoDBJson("IMAGE#")
+        }
+    },
+    "scanIndexForward": false
+}

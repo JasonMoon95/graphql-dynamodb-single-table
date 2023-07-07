@@ -33,46 +33,62 @@ export class SingleTableCdkStack extends Stack {
     const tableDatasource = api.addDynamoDbDataSource('DynamoDBTable', dynamodbTable)
 
     tableDatasource.createResolver({
+      typeName: 'Query',
+      fieldName: 'getUser',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getUser.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getUser.response.vtl'),
+    })
+
+    tableDatasource.createResolver({
       typeName: 'Mutation',
-      fieldName: 'createSite',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createSite.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createSite.response.vtl'),
+      fieldName: 'createUser',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createUser.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createUser.response.vtl'),
     })
 
     tableDatasource.createResolver({
       typeName: 'Query',
-      fieldName: 'getSite',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getSite.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getSite.response.vtl'),
+      fieldName: 'getImage',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getImage.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getImage.response.vtl'),
     })
 
     tableDatasource.createResolver({
       typeName: 'Mutation',
-      fieldName: 'createPost',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createPost.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createPost.response.vtl'),
+      fieldName: 'createImage',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createImage.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createImage.response.vtl'),
+    })
+
+    tableDatasource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createOwnedImage',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createOwnedImage.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createOwnedImage.response.vtl'),
     })
 
     tableDatasource.createResolver({
       typeName: 'Query',
-      fieldName: 'getPostsForSite',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getPostsForSite.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getPostsForSite.response.vtl'),
+      fieldName: 'getRandomImage',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getRandomImage.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getRandomImage.response.vtl'),
     })
 
     tableDatasource.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'createComment',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createComment.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Mutation.createComment.response.vtl'),
+      typeName: 'Query',
+      fieldName: 'getOwnedImageForImage',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getOwnedImageForImage.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getOwnedImageForImage.response.vtl'),
     })
 
     tableDatasource.createResolver({
-      typeName: 'Post',
-      fieldName: 'comments',
-      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Post.comments.request.vtl'),
-      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Post.comments.response.vtl'),
+      typeName: 'Query',
+      fieldName: 'getOwnedImageForUser',
+      requestMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getOwnedImageForUser.request.vtl'),
+      responseMappingTemplate: MappingTemplate.fromFile('lib/mapping-templates/Query.getOwnedImageForUser.response.vtl'),
     })
+
+    
 
     const apiKey = new CfnApiKey(this, 'GraphQLApiKey', {
       apiId: api.apiId

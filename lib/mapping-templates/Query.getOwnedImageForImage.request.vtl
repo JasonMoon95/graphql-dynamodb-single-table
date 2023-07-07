@@ -1,0 +1,11 @@
+{
+    "version" : "2018-05-29",
+    "operation" : "Query",
+    "query": {
+        "expression": "PK = :pk AND SK = :sk",
+        "expressionValues": {
+            ":pk": $util.dynamodb.toDynamoDBJson("IMAGE#$ctx.args.imageId"),
+            ":sk": $util.dynamodb.toDynamoDBJson("OWNEDIMAGE#$ctx.args.ownedImageId")
+        }
+    }
+}

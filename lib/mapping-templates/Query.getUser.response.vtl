@@ -1,0 +1,20 @@
+#if($ctx.results.items.size() == 0)
+    #return
+#end
+
+#set($user = {})
+#set($ownedImages = [])
+#foreach($item in $ctx.result.items)
+    #if($item["_TYPE"] == "USER")
+        #set ($user = $item)
+    #elseif($item["_TYPE"] == "OWNEDIMAGE")
+        $util.qr($ownedImages.add($item))
+    #end
+#end
+
+$util.qr($user.put("ownedImage", {
+    "cursor": $ctx.result.nextToken,
+    "ownedImage": $ownedImages
+}))
+
+$util.toJson($user)

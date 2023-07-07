@@ -1,0 +1,23 @@
+#set($id = $util.autoUlid())
+
+{
+    "version" : "2018-05-29",
+    "operation" : "PutItem",
+    "key" : {
+        "PK": $util.dynamodb.toDynamoDBJson("IMAGE#${id}"),
+        "SK": $util.dynamodb.toDynamoDBJson("IMAGE#${id}")
+    },
+    "attributeValues" : {
+        "_TYPE": $util.dynamodb.toDynamoDBJson("IMAGE"),
+        "id": $util.dynamodb.toDynamoDBJson(${id}),
+        "source_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.source_url),
+        "thumbnail_url": $util.dynamodb.toDynamoDBJson($ctx.args.input.thumbnail_url),
+        "title": $util.dynamodb.toDynamoDBJson($ctx.args.input.title),
+        "status": $util.dynamodb.toDynamoDBJson($ctx.args.input.status),
+        "createdAt": $util.dynamodb.toDynamoDBJson($ctx.args.input.createdAt),
+        "createdBy": $util.dynamodb.toDynamoDBJson($ctx.args.input.createdBy),
+    },
+    "condition": {
+        "expression": "attribute_not_exists(PK)"
+    }
+}

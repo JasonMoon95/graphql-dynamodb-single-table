@@ -3,64 +3,81 @@ schema {
   mutation: Mutation
 }
 
+enum ImageStatus {
+  Approved
+  Pending
+  Rejected
+}
+
 type Query {
-  getSite(domain: String!): Site
-  getPostsForSite(domain: String!, num: Int, after: String): PostConnection
+  getUser(userId: String!): User
+  getImage(imageId: String!): Image
+  getRandomImage: Image
+  getOwnedImageForUser(userId: String! ownedImageId: String!): OwnedImage
+  getOwnedImageForImage(imageId: String! ownedImageId: String!): OwnedImage
 }
 
 type Mutation {
-  createSite(input: CreateSiteInput): Site
-  createPost(input: CreatePostInput): Post
-  createComment(input: CreateCommentInput): Comment
+  createUser(input: CreateUserInput): User
+  createImage(input: CreateImageInput): Image
+  createOwnedImage(input: CreateOwnedImageInput): Boolean
 }
 
-type Site {
+type User {
   id: ID!
   name: String!
-  domain: String!
-  posts: PostConnection!
+  email: String!
+  remainGiftbox: Int!
+  createdAt: AWSDateTime!
+  ownedImage(num: Int, after: String): OwnedImageConnection!
 }
 
-type PostConnection {
-  cursor: String
-  posts: [Post]
-}
-
-type Post {
+type Image {
   id: ID!
+  source_url: String!
+  thumbnail_url: String!
   title: String!
-  publishDate: AWSDateTime!
-  content: String!
-  comments(num: Int, after: String): CommentConnection!
+  createdAt: AWSDateTime!
+
+  status: ImageStatus!
+  createdBy: ID!
+  ownedImage(num: Int, after: String): OwnedImageConnection!
 }
 
-type CommentConnection {
+type OwnedImageConnection {
   cursor: String
-  comments: [Comment]
+  ownedImage: [OwnedImage]
 }
 
-type Comment {
+type OwnedImage {
   id: ID!
-  username: String!
-  content: String!
-  publishDate: AWSDateTime!
-}
-
-input CreateSiteInput {
-  name: String
-  domain: String!
-}
-
-input CreatePostInput {
-  domain: String!
+  source_url: String!
+  thumbnail_url: String!
   title: String!
-  publishDate: AWSDateTime
-  content: String!
+  createdAt: AWSDateTime!
 }
 
-input CreateCommentInput {
-  postId: String!
-  username: String!
-  publishDate: AWSDateTime
-  content: String!
+input CreateUserInput {
+  name: String!
+  email: String!
+  remainGiftbox: Int!
+  createdAt: AWSDateTime!
+}
+
+input CreateImageInput {
+  source_url: String!
+  thumbnail_url: String!
+  title: String!
+  status: ImageStatus!
+  createdBy: ID!
+  createdAt: AWSDateTime!
+}
+
+input CreateOwnedImageInput {
+  userId: String!
+  imageId: String!
+  source_url: String!
+  thumbnail_url: String!
+  title: String!
+  createdAt: AWSDateTime!
 }
